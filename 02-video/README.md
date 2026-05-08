@@ -1,1 +1,1 @@
-Displays "Hello, World!" on the OneChipBook internal LCD in XVGA resolution (1024 x 768 @ 59.4 Hz)
+Displays "Hello, World!" on the internal LCD in XVGA resolution (1024 x 768 @ 59.4 Hz)

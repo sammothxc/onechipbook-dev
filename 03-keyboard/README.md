@@ -1,0 +1,1 @@
+Text typed on the keyboard appears on the screen
