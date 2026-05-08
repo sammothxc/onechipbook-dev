@@ -1,11 +1,11 @@
 module timing (
-    input wire pixel_clk,
-    input wire rst_n, // active-low reset
-    output reg hsync,
-    output reg vsync,
-    output reg visible,
-    output reg [10:0] pixel_x,
-    output reg [9:0] pixel_y
+    input  wire        pixel_clk,
+    input  wire        rst_n,           // active-low reset
+    output reg         hsync,
+    output reg         vsync,
+    output reg         visible,
+    output reg [10:0]  pixel_x,
+    output reg  [9:0]  pixel_y
 );
 
     // 640x480 @ 60Hz timing (VGA)
@@ -34,7 +34,7 @@ module timing (
     // localparam V_BACK_PORCH  = 10'd23;
     // localparam V_TOTAL       = 10'd628;
 
-    // 1024x768 @ 60Hz timing (XGA)
+    // 1024x768 @ ~59.4Hz timing (XGA, pixel clk 64.43 MHz)
     localparam H_VISIBLE     = 11'd1024;
     localparam H_FRONT_PORCH = 11'd24;
     localparam H_SYNC_PULSE  = 11'd136;

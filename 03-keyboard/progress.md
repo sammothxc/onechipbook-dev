@@ -79,7 +79,7 @@ The `.qsf` is the source of truth for pin assignments and project settings.
 - **Sync polarity is active-low for ALL resolutions on this board's scaler**, even though SVGA/XGA specs say positive. Don't trust the spec; trust the working measurement.
 - **DIP2 (the schematic's DIP2, physical SW3) on disables video to the LCD entirely.** Keep it OFF for normal operation.
 - **PLL ratios are tight on Cyclone I.** Cyclone PLLs use small integer M/N ratios with VCO range constraints. Don't expect arbitrary frequencies. The MegaWizard will report what it actually achieved — believe it, not what you asked for.
-- **The character ROM read has 1 cycle of latency. The output register adds another. Total pipeline = 2 cycles** between pixel_x change and the corresponding RGB output. Any signal driving the output stage that's derived from pixel_x must be delayed 2 cycles.
+- **The character ROM has 2 cycles of latency** (`outdata_reg_a = "CLOCK0"` registers both address and data). The output register adds a third. Any metadata signal derived from pixel_x must be delayed with **2 registers (`_d1` and `_d2`)** to align with ROM output. See "Things that DON'T work" for details.
 - **The crystal is 21.47727 MHz, not 21 MHz.** Use 46.561 ns period in SDC files.
 - **The user has ALL the Quartus warnings investigated.** They understand `dangling logic` warnings (signals optimized away because nothing uses them — fine when expected), the PowerPlay analyzer "skipped" warning (informational, ignore), and PLL connectivity warnings (areset unused, harmless if you tie it to 1'b0 explicitly).
 
@@ -123,3 +123,9 @@ After the keyboard work, the user wants to build a CPU (RV32I, single-cycle to s
 - Standard SVGA active-high sync — the scaler rejects it on this board
 - PLLs targeting frequencies that need M/N ratios outside Cyclone I's range — accept the closest achievable
 - Quartus newer than 13.0sp1 for Cyclone I — device support dropped
+- **char_rom pipeline is 2 cycles, not 1.** `outdata_reg_a = "CLOCK0"` means the ROM registers both the address input AND the data output. Total pipeline from `pixel_x` to `r/g/b`: 4 cycles (2 ROM + 1 pixel_on combinational + 1 output register). Metadata signals (`col`, `in_area`, etc.) need `_d1` AND `_d2` delay registers to align with `rom_data` at the `pixel_on` stage. One delay register is 1 cycle short — causes a column-shift bug where each character's first column appears displaced. Don't derive this from first principles; match `text_renderer.v`'s pipeline exactly.
+
+## 03-keyboard completed stages
+
+- **Stage A:** PS/2 byte receiver (`ps2_rx.v`). 2-flop sync, falling edge detect, 11-bit frame shift register, odd parity check, `data_valid` pulse. Last received scan code shown on 8 LEDs. Tested on hardware.
+- **Stage B:** `hex_display.v` renders last received scan code as 2 hex characters at center of 1024×768 display. Uses `vga65mhz_pll` (64.43 MHz), XGA timing, same `char_rom` as 02-video. Tested on hardware.

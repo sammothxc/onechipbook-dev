@@ -14,11 +14,10 @@ module video (
     wire visible;
     wire [10:0] pixel_x;
     wire [9:0] pixel_y;
-    
 
     // vga25mhz_pll pll_inst (
-    vga40mhz_pll pll_inst (
-    // vga65mhz_pll pll_inst (
+    // vga40mhz_pll pll_inst (
+    vga65mhz_pll pll_inst (
         .inclk0 (clk_21m),
         .c0 (pixel_clk),
         .locked (pll_locked)

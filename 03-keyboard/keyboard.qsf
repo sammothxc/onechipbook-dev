@@ -68,7 +68,34 @@ set_location_assignment PIN_50 -to led[7]
 
 set_global_assignment -name VERILOG_FILE keyboard.v
 set_global_assignment -name VERILOG_FILE ps2_rx.v
+set_global_assignment -name VERILOG_FILE sc_parser.v
+set_global_assignment -name VERILOG_FILE terminal.v
+set_global_assignment -name VERILOG_FILE text_buf.v
+set_global_assignment -name VERILOG_FILE timing.v
+set_global_assignment -name VERILOG_FILE char_rom.v
+set_global_assignment -name VERILOG_FILE vga65mhz_pll.v
 set_global_assignment -name SDC_FILE keyboard.sdc
+
+set_location_assignment PIN_75 -to hsync
+set_location_assignment PIN_74 -to vsync
+set_location_assignment PIN_95 -to r[0]
+set_location_assignment PIN_98 -to r[1]
+set_location_assignment PIN_99 -to r[2]
+set_location_assignment PIN_100 -to r[3]
+set_location_assignment PIN_101 -to r[4]
+set_location_assignment PIN_104 -to r[5]
+set_location_assignment PIN_85 -to g[0]
+set_location_assignment PIN_86 -to g[1]
+set_location_assignment PIN_87 -to g[2]
+set_location_assignment PIN_88 -to g[3]
+set_location_assignment PIN_93 -to g[4]
+set_location_assignment PIN_94 -to g[5]
+set_location_assignment PIN_77 -to b[0]
+set_location_assignment PIN_78 -to b[1]
+set_location_assignment PIN_79 -to b[2]
+set_location_assignment PIN_82 -to b[3]
+set_location_assignment PIN_83 -to b[4]
+set_location_assignment PIN_84 -to b[5]
 set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
 set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
 set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
