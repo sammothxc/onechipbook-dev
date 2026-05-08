@@ -8,20 +8,20 @@ module timing (
     output reg  [9:0]  pixel_y
 );
 
-    // 640x480 @ 60Hz timing parameters (standard VGA)
-    // localparam H_VISIBLE     = 11'd640;
-    // localparam H_FRONT_PORCH = 11'd16;
-    // localparam H_SYNC_PULSE  = 11'd96;
-    // localparam H_BACK_PORCH  = 11'd48;
-    // localparam H_TOTAL       = 11'd800;
+    // 640x480 @ 60Hz timing (VGA)
+    localparam H_VISIBLE     = 11'd640;
+    localparam H_FRONT_PORCH = 11'd16;
+    localparam H_SYNC_PULSE  = 11'd96;
+    localparam H_BACK_PORCH  = 11'd48;
+    localparam H_TOTAL       = 11'd800;
 
-    // localparam V_VISIBLE     = 10'd480;
-    // localparam V_FRONT_PORCH = 10'd10;
-    // localparam V_SYNC_PULSE  = 10'd2;
-    // localparam V_BACK_PORCH  = 10'd33;
-    // localparam V_TOTAL       = 10'd525;
+    localparam V_VISIBLE     = 10'd480;
+    localparam V_FRONT_PORCH = 10'd10;
+    localparam V_SYNC_PULSE  = 10'd2;
+    localparam V_BACK_PORCH  = 10'd33;
+    localparam V_TOTAL       = 10'd525;
 
-    // 800x600 @ 60Hz timing (VESA DMT)
+    // 800x600 @ 60Hz timing (SVGA)
     // localparam H_VISIBLE     = 11'd800;
     // localparam H_FRONT_PORCH = 11'd40;
     // localparam H_SYNC_PULSE  = 11'd128;
@@ -34,18 +34,18 @@ module timing (
     // localparam V_BACK_PORCH  = 10'd23;
     // localparam V_TOTAL       = 10'd628;
 
-    // 1024x768 @ 60Hz timing parameters (VESA DMT)
-    localparam H_VISIBLE     = 11'd1024;
-    localparam H_FRONT_PORCH = 11'd24;
-    localparam H_SYNC_PULSE  = 11'd136;
-    localparam H_BACK_PORCH  = 11'd160;
-    localparam H_TOTAL       = 11'd1344;
+    // 1024x768 @ 60Hz timing (XGA)
+    // localparam H_VISIBLE     = 11'd1024;
+    // localparam H_FRONT_PORCH = 11'd24;
+    // localparam H_SYNC_PULSE  = 11'd136;
+    // localparam H_BACK_PORCH  = 11'd160;
+    // localparam H_TOTAL       = 11'd1344;
 
-    localparam V_VISIBLE     = 10'd768;
-    localparam V_FRONT_PORCH = 10'd3;
-    localparam V_SYNC_PULSE  = 10'd6;
-    localparam V_BACK_PORCH  = 10'd29;
-    localparam V_TOTAL       = 10'd806;
+    // localparam V_VISIBLE     = 10'd768;
+    // localparam V_FRONT_PORCH = 10'd3;
+    // localparam V_SYNC_PULSE  = 10'd6;
+    // localparam V_BACK_PORCH  = 10'd29;
+    // localparam V_TOTAL       = 10'd806;
     
     // Sync pulse boundaries (precomputed for cleaner combinational logic)
     localparam H_SYNC_START = H_VISIBLE + H_FRONT_PORCH;             // 1048

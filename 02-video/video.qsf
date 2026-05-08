@@ -75,10 +75,12 @@ set_location_assignment PIN_55 -to rst_n_in
 set_location_assignment PIN_74 -to vsync
 set_global_assignment -name RESERVE_ALL_UNUSED_PINS_NO_OUTPUT_GND "AS INPUT TRI-STATED"
 set_location_assignment PIN_43 -to led1
+set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
+set_global_assignment -name VERILOG_FILE vga65mhz_pll.v
+set_global_assignment -name VERILOG_FILE vga40mhz_pll.v
+set_global_assignment -name VERILOG_FILE vga25mhz_pll.v
 set_global_assignment -name VERILOG_FILE text_renderer.v
 set_global_assignment -name VERILOG_FILE char_rom.v
-set_global_assignment -name VERILOG_FILE vga_pll.v
 set_global_assignment -name SDC_FILE video.sdc
 set_global_assignment -name VERILOG_FILE video.v
 set_global_assignment -name VERILOG_FILE timing.v
-set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

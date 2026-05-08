@@ -22,9 +22,18 @@ module text_renderer (
     //          of "Hello, World!" we're looking at (if any)
     // ------------------------------------------------------------------
     
-    // Display "Hello, World!" at row 18, columns 43-55 (roughly centered)
-    localparam MSG_ROW = 6'd24;   // Roughly vertical center
-    localparam MSG_COL = 7'd57;   // Roughly horizontal center
+    // VGA
+    localparam MSG_ROW = 6'd15;
+    localparam MSG_COL = 7'd33;
+
+    // SVGA
+    // localparam MSG_ROW = 6'd18;
+    // localparam MSG_COL = 7'd41;
+
+    // XGA
+    // localparam MSG_ROW = 6'd24;
+    // localparam MSG_COL = 7'd57;
+
     localparam MSG_LEN   = 13;
     
     wire in_message_row = (char_row == MSG_ROW);
