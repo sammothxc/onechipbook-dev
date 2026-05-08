@@ -1,0 +1,84 @@
+# -------------------------------------------------------------------------- #
+#
+# Copyright (C) 1991-2011 Altera Corporation
+# Your use of Altera Corporation's design tools, logic functions 
+# and other software and tools, and its AMPP partner logic 
+# functions, and any output files from any of the foregoing 
+# (including device programming or simulation files), and any 
+# associated documentation or information are expressly subject 
+# to the terms and conditions of the Altera Program License 
+# Subscription Agreement, Altera MegaCore Function License 
+# Agreement, or other applicable license agreement, including, 
+# without limitation, that your use is for the sole purpose of 
+# programming logic devices manufactured by Altera and sold by 
+# Altera or its authorized distributors.  Please refer to the 
+# applicable agreement for further details.
+#
+# -------------------------------------------------------------------------- #
+#
+# Quartus II
+# Version 11.0 Build 157 04/27/2011 SJ Web Edition
+# Date created = 00:46:42  May 08, 2026
+#
+# -------------------------------------------------------------------------- #
+#
+# Notes:
+#
+# 1) The default values for assignments are stored in the file:
+#		video_assignment_defaults.qdf
+#    If this file doesn't exist, see file:
+#		assignment_defaults.qdf
+#
+# 2) Altera recommends that you do not modify this file. This
+#    file is updated automatically by the Quartus II software
+#    and any changes you make may be lost or overwritten.
+#
+# -------------------------------------------------------------------------- #
+
+
+set_global_assignment -name FAMILY Cyclone
+set_global_assignment -name DEVICE EP1C12Q240C8
+set_global_assignment -name TOP_LEVEL_ENTITY video
+set_global_assignment -name ORIGINAL_QUARTUS_VERSION 11.0
+set_global_assignment -name PROJECT_CREATION_TIME_DATE "00:46:42  MAY 08, 2026"
+set_global_assignment -name LAST_QUARTUS_VERSION 11.0
+set_global_assignment -name DEVICE_FILTER_SPEED_GRADE 8
+set_global_assignment -name ERROR_CHECK_FREQUENCY_DIVISOR 1
+set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
+set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
+set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
+set_global_assignment -name STRATIX_DEVICE_IO_STANDARD "3.3-V LVTTL"
+set_global_assignment -name USE_CONFIGURATION_DEVICE ON
+set_global_assignment -name CYCLONE_CONFIGURATION_DEVICE EPCS4
+set_global_assignment -name RESERVE_ALL_UNUSED_PINS "AS INPUT TRI-STATED"
+set_location_assignment PIN_84 -to b[5]
+set_location_assignment PIN_83 -to b[4]
+set_location_assignment PIN_82 -to b[3]
+set_location_assignment PIN_79 -to b[2]
+set_location_assignment PIN_78 -to b[1]
+set_location_assignment PIN_77 -to b[0]
+set_location_assignment PIN_28 -to clk_21m
+set_location_assignment PIN_94 -to g[5]
+set_location_assignment PIN_93 -to g[4]
+set_location_assignment PIN_88 -to g[3]
+set_location_assignment PIN_87 -to g[2]
+set_location_assignment PIN_86 -to g[1]
+set_location_assignment PIN_85 -to g[0]
+set_location_assignment PIN_75 -to hsync
+set_location_assignment PIN_104 -to r[5]
+set_location_assignment PIN_101 -to r[4]
+set_location_assignment PIN_100 -to r[3]
+set_location_assignment PIN_99 -to r[2]
+set_location_assignment PIN_98 -to r[1]
+set_location_assignment PIN_95 -to r[0]
+set_location_assignment PIN_55 -to rst_n_in
+set_location_assignment PIN_74 -to vsync
+set_global_assignment -name RESERVE_ALL_UNUSED_PINS_NO_OUTPUT_GND "AS INPUT TRI-STATED"
+set_location_assignment PIN_43 -to led1
+set_global_assignment -name VERILOG_FILE text_renderer.v
+set_global_assignment -name VERILOG_FILE char_rom.v
+set_global_assignment -name VERILOG_FILE vga_pll.v
+set_global_assignment -name SDC_FILE video.sdc
+set_global_assignment -name VERILOG_FILE video.v
+set_global_assignment -name VERILOG_FILE timing.v
+set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
