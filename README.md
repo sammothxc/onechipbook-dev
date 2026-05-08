@@ -1,2 +1,2 @@
-# onechipbook-blink
-Blinking an LED on the Cyclone I-based OneChipBook
+# onechipbook-dev
+FPGA development on the Cyclone I-based OneChipBook
