@@ -9,30 +9,30 @@ module timing (
 );
 
     // 640x480 @ 60Hz timing (VGA)
-    localparam H_VISIBLE     = 11'd640;
-    localparam H_FRONT_PORCH = 11'd16;
-    localparam H_SYNC_PULSE  = 11'd96;
-    localparam H_BACK_PORCH  = 11'd48;
-    localparam H_TOTAL       = 11'd800;
+    // localparam H_VISIBLE     = 11'd640;
+    // localparam H_FRONT_PORCH = 11'd16;
+    // localparam H_SYNC_PULSE  = 11'd96;
+    // localparam H_BACK_PORCH  = 11'd48;
+    // localparam H_TOTAL       = 11'd800;
 
-    localparam V_VISIBLE     = 10'd480;
-    localparam V_FRONT_PORCH = 10'd10;
-    localparam V_SYNC_PULSE  = 10'd2;
-    localparam V_BACK_PORCH  = 10'd33;
-    localparam V_TOTAL       = 10'd525;
+    // localparam V_VISIBLE     = 10'd480;
+    // localparam V_FRONT_PORCH = 10'd10;
+    // localparam V_SYNC_PULSE  = 10'd2;
+    // localparam V_BACK_PORCH  = 10'd33;
+    // localparam V_TOTAL       = 10'd525;
 
     // 800x600 @ 60Hz timing (SVGA)
-    // localparam H_VISIBLE     = 11'd800;
-    // localparam H_FRONT_PORCH = 11'd40;
-    // localparam H_SYNC_PULSE  = 11'd128;
-    // localparam H_BACK_PORCH  = 11'd88;
-    // localparam H_TOTAL       = 11'd1056;
+    localparam H_VISIBLE     = 11'd800;
+    localparam H_FRONT_PORCH = 11'd40;
+    localparam H_SYNC_PULSE  = 11'd128;
+    localparam H_BACK_PORCH  = 11'd88;
+    localparam H_TOTAL       = 11'd1056;
 
-    // localparam V_VISIBLE     = 10'd600;
-    // localparam V_FRONT_PORCH = 10'd1;
-    // localparam V_SYNC_PULSE  = 10'd4;
-    // localparam V_BACK_PORCH  = 10'd23;
-    // localparam V_TOTAL       = 10'd628;
+    localparam V_VISIBLE     = 10'd600;
+    localparam V_FRONT_PORCH = 10'd1;
+    localparam V_SYNC_PULSE  = 10'd4;
+    localparam V_BACK_PORCH  = 10'd23;
+    localparam V_TOTAL       = 10'd628;
 
     // 1024x768 @ 60Hz timing (XGA)
     // localparam H_VISIBLE     = 11'd1024;
@@ -48,10 +48,10 @@ module timing (
     // localparam V_TOTAL       = 10'd806;
     
     // Sync pulse boundaries (precomputed for cleaner combinational logic)
-    localparam H_SYNC_START = H_VISIBLE + H_FRONT_PORCH;             // 1048
-    localparam H_SYNC_END   = H_SYNC_START + H_SYNC_PULSE;           // 1184
-    localparam V_SYNC_START = V_VISIBLE + V_FRONT_PORCH;             // 771
-    localparam V_SYNC_END   = V_SYNC_START + V_SYNC_PULSE;           // 777
+    localparam H_SYNC_START = H_VISIBLE + H_FRONT_PORCH; // 1048
+    localparam H_SYNC_END   = H_SYNC_START + H_SYNC_PULSE; // 1184
+    localparam V_SYNC_START = V_VISIBLE + V_FRONT_PORCH; // 771
+    localparam V_SYNC_END   = V_SYNC_START + V_SYNC_PULSE; // 777
     
     reg [10:0] h_count;
     reg  [9:0] v_count;
@@ -75,11 +75,11 @@ module timing (
     // Registered outputs (one cycle of latency, but cleaner timing)
     always @(posedge pixel_clk) begin
 
-        // Active-low sync pulses (XGA standard)
+        // active-low sync
         hsync   <= ~((h_count >= H_SYNC_START) && (h_count < H_SYNC_END));
         vsync   <= ~((v_count >= V_SYNC_START) && (v_count < V_SYNC_END));
 
-        // SVGA: positive (active-high) sync
+        // active-high sync
         // hsync   <= (h_count >= H_SYNC_START) && (h_count < H_SYNC_END);
         // vsync   <= (v_count >= V_SYNC_START) && (v_count < V_SYNC_END);
 
