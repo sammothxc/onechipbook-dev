@@ -30,8 +30,34 @@ set_global_assignment -name RESERVE_ALL_UNUSED_PINS_NO_OUTPUT_GND "AS INPUT TRI-
 set_location_assignment PIN_28 -to clk_21m
 set_location_assignment PIN_55 -to rst_n_in
 
-# DIP0 (physical SW1) — audio enable
+# DIP0 (physical SW1) — master audio enable
 set_location_assignment PIN_53 -to dip0
+
+# PS/2 keyboard
+set_location_assignment PIN_68 -to ps2_clk
+set_location_assignment PIN_67 -to ps2_data
+
+# Video out — VGA-style sync + 6-bit RGB to LCD scaler
+set_location_assignment PIN_75 -to hsync
+set_location_assignment PIN_74 -to vsync
+set_location_assignment PIN_95 -to r[0]
+set_location_assignment PIN_98 -to r[1]
+set_location_assignment PIN_99 -to r[2]
+set_location_assignment PIN_100 -to r[3]
+set_location_assignment PIN_101 -to r[4]
+set_location_assignment PIN_104 -to r[5]
+set_location_assignment PIN_85 -to g[0]
+set_location_assignment PIN_86 -to g[1]
+set_location_assignment PIN_87 -to g[2]
+set_location_assignment PIN_88 -to g[3]
+set_location_assignment PIN_93 -to g[4]
+set_location_assignment PIN_94 -to g[5]
+set_location_assignment PIN_77 -to b[0]
+set_location_assignment PIN_78 -to b[1]
+set_location_assignment PIN_79 -to b[2]
+set_location_assignment PIN_82 -to b[3]
+set_location_assignment PIN_83 -to b[4]
+set_location_assignment PIN_84 -to b[5]
 
 # Heartbeat LED (LED0)
 set_location_assignment PIN_43 -to led
@@ -55,6 +81,14 @@ set_location_assignment PIN_120 -to sr[5]
 # Source files
 set_global_assignment -name VERILOG_FILE audio.v
 set_global_assignment -name VERILOG_FILE tone_gen.v
+set_global_assignment -name VERILOG_FILE ps2_rx.v
+set_global_assignment -name VERILOG_FILE key_decoder.v
+set_global_assignment -name VERILOG_FILE key_to_note.v
+set_global_assignment -name VERILOG_FILE vga65mhz_pll.v
+set_global_assignment -name VERILOG_FILE timing.v
+set_global_assignment -name VERILOG_FILE char_rom.v
+set_global_assignment -name VERILOG_FILE freq_display.v
+set_global_assignment -name MIF_FILE vga_8x16.mif
 set_global_assignment -name SDC_FILE audio.sdc
 
 set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
