@@ -52,6 +52,7 @@ set_global_assignment -name USE_CONFIGURATION_DEVICE ON
 set_global_assignment -name CYCLONE_CONFIGURATION_DEVICE EPCS4
 set_global_assignment -name RESERVE_ALL_UNUSED_PINS "AS INPUT TRI-STATED"
 set_global_assignment -name RESERVE_ALL_UNUSED_PINS_NO_OUTPUT_GND "AS INPUT TRI-STATED"
+set_global_assignment -name VERILOG_CONSTANT_LOOP_LIMIT 10000
 
 set_location_assignment PIN_28 -to clk_21m
 set_location_assignment PIN_55 -to rst_n_in

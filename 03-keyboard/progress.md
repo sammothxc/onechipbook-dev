@@ -85,19 +85,7 @@ The `.qsf` is the source of truth for pin assignments and project settings.
 
 ## What's next on the roadmap
 
-Currently we are about to start **PS/2 keyboard input** as the next major subsystem. The plan:
-
-- **Stage A:** PS/2 byte receiver. Synchronize ps2_clk and ps2_data inputs (2-flop sync), detect falling edges on ps2_clk, shift in 11-bit frames (start bit + 8 data LSB-first + parity + stop), validate framing, output one byte at a time with a `data_valid` pulse. Display the most recent byte on the 8 LEDs as a sanity check.
-
-- **Stage B:** Display the byte as hex on screen using the existing text renderer infrastructure. Press a key, see the hex code appear.
-
-- **Stage C:** Scan code parser. Handle 0xE0 (extended) and 0xF0 (release) prefixes, emit clean key-down/key-up events.
-
-- **Stage D:** Scan code → ASCII translator with shift-state tracking.
-
-- **Stage E:** Replace the hardcoded message with a writable text buffer in M4K block RAM, wire keystrokes to it with a cursor that advances. **At this point we have a working text terminal.**
-
-After the keyboard work, the user wants to build a CPU (RV32I, single-cycle to start), an SDRAM controller (Wishbone-attached), a UART for printf-style debugging, and eventually port a small OS or run C programs through it.
+03-keyboard is **complete** — working text terminal on real hardware. After this, the user wants to build a CPU (RV32I, single-cycle to start), an SDRAM controller (Wishbone-attached), a UART for printf-style debugging, and eventually port a small OS or run C programs through it.
 
 ## How to help going forward
 
@@ -129,3 +117,8 @@ After the keyboard work, the user wants to build a CPU (RV32I, single-cycle to s
 
 - **Stage A:** PS/2 byte receiver (`ps2_rx.v`). 2-flop sync, falling edge detect, 11-bit frame shift register, odd parity check, `data_valid` pulse. Last received scan code shown on 8 LEDs. Tested on hardware.
 - **Stage B:** `hex_display.v` renders last received scan code as 2 hex characters at center of 1024×768 display. Uses `vga65mhz_pll` (64.43 MHz), XGA timing, same `char_rom` as 02-video. Tested on hardware.
+- **Stage C:** `sc_parser.v` strips 0xE0 (extended) and 0xF0 (release) prefixes, emits key-down/key-up events.
+- **Stage D:** Scan code → ASCII translation with shift-state tracking inside `sc_parser.v`. Emits `ascii` + `ascii_valid` for printable keys, plus 0x0D (Enter) and 0x08 (Backspace).
+- **Stage E:** `text_buf.v` (8192×8 inferred dual-port M4K RAM, init 0x20), `terminal.v` (4-cycle pixel pipeline reading from buffer), cursor controller in `keyboard.v`. Keystrokes write into the buffer and advance the cursor; Enter wraps to next row, Backspace erases. **Working text terminal on hardware.**
+  - text_buf init loop (8192 iters) exceeded Quartus's default constant-loop limit of 5000; bumped via `set_global_assignment -name VERILOG_CONSTANT_LOOP_LIMIT 10000` in `keyboard.qsf`.
+  - Synthesizer optimizes away 2 of 16 M4K blocks because bit 7 of `rd_data` is never read in `terminal.v` (only `rd_data[6:0]`) and `wr_data` is always < 0x80 → bit-7 storage is provably constant. Benign; 14 M4Ks used. Restore by widening `char_rom_addr` to 12 bits if extended ASCII is ever needed.
