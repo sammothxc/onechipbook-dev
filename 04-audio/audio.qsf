@@ -81,6 +81,7 @@ set_location_assignment PIN_120 -to sr[5]
 # Source files
 set_global_assignment -name VERILOG_FILE audio.v
 set_global_assignment -name VERILOG_FILE tone_gen.v
+set_global_assignment -name VERILOG_FILE voicebank.v
 set_global_assignment -name VERILOG_FILE ps2_rx.v
 set_global_assignment -name VERILOG_FILE key_decoder.v
 set_global_assignment -name VERILOG_FILE key_to_note.v

@@ -94,14 +94,9 @@ module audio (
         .recognized  (kn_recognized)
     );
 
-    // ---- Note state — monophonic, most-recent-key-down wins ----
-    reg        note_active;
-    reg  [7:0] active_key;
-    reg  [1:0] active_wave;
-    reg [31:0] active_ftw;
-
     // ---- Display state — latched on every recognized key-down. Held until
     // next key-down; release does NOT clear (last-frequency-stays semantic).
+    // Independent of voice allocation — display reflects most-recent press.
     reg  [7:0] disp_note_letter;
     reg  [7:0] disp_note_octave;
     reg  [3:0] disp_freq_h, disp_freq_t, disp_freq_u;
@@ -109,46 +104,45 @@ module audio (
 
     always @(posedge clk_21m or negedge rst_n_in) begin
         if (!rst_n_in) begin
-            note_active      <= 1'b0;
-            active_key       <= 8'h00;
-            active_wave      <= 2'b00;
-            active_ftw       <= 32'd0;
             disp_note_letter <= " ";
             disp_note_octave <= " ";
             disp_freq_h      <= 4'd0;
             disp_freq_t      <= 4'd0;
             disp_freq_u      <= 4'd0;
             disp_wave_sel    <= 2'b11;   // unmapped -> wave_char defaults to spaces
-        end else if (kd_valid && kn_recognized) begin
-            if (!kd_is_release) begin
-                note_active      <= 1'b1;
-                active_key       <= kd_scan_code;
-                active_wave      <= kn_wave_sel;
-                active_ftw       <= kn_ftw;
-                disp_note_letter <= kn_note_letter;
-                disp_note_octave <= kn_note_octave;
-                disp_freq_h      <= kn_freq_h;
-                disp_freq_t      <= kn_freq_t;
-                disp_freq_u      <= kn_freq_u;
-                disp_wave_sel    <= kn_wave_sel;
-            end else if (kd_scan_code == active_key) begin
-                note_active <= 1'b0;
-            end
+        end else if (kd_valid && kn_recognized && !kd_is_release) begin
+            disp_note_letter <= kn_note_letter;
+            disp_note_octave <= kn_note_octave;
+            disp_freq_h      <= kn_freq_h;
+            disp_freq_t      <= kn_freq_t;
+            disp_freq_u      <= kn_freq_u;
+            disp_wave_sel    <= kn_wave_sel;
         end
     end
 
-    // ---- Tone generator ----
-    wire [5:0] tone_sample;
-    tone_gen tone_inst (
-        .clk      (clk_21m),
-        .rst_n    (rst_n_in),
-        .ftw      (active_ftw),
-        .wave_sel (active_wave),
-        .sample   (tone_sample)
+    // ---- 4-voice polyphonic bank ----
+    wire signed [9:0] sum_sample;
+
+    voicebank vb_inst (
+        .clk          (clk_21m),
+        .rst_n        (rst_n_in),
+        .ev_valid     (kd_valid && kn_recognized),
+        .ev_release   (kd_is_release),
+        .ev_scan_code (kd_scan_code),
+        .ev_wave_sel  (kn_wave_sel),
+        .ev_ftw       (kn_ftw),
+        .sum_sample   (sum_sample)
     );
 
-    // ---- Output: gated by note_active AND dip0_en ----
-    wire [5:0] out_sample = (dip0_en && note_active) ? tone_sample : MID;
+    // ---- Re-bias to mid-rail and saturate to 6-bit DAC range ----
+    // sum_sample is signed [9:0]; +MID then clamp to [0, 63].
+    wire signed [10:0] biased = {sum_sample[9], sum_sample} + 11'sd32;
+    wire [5:0] sample_out = (biased < 11'sd0)  ? 6'd0  :
+                            (biased > 11'sd63) ? 6'd63 :
+                            biased[5:0];
+
+    // ---- DIP0 master mute ----
+    wire [5:0] out_sample = dip0_en ? sample_out : MID;
     assign sl = out_sample;
     assign sr = out_sample;
 
