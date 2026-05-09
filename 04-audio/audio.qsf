@@ -1,0 +1,64 @@
+# -------------------------------------------------------------------------- #
+#
+# Copyright (C) 1991-2011 Altera Corporation
+#
+# -------------------------------------------------------------------------- #
+#
+# Quartus II
+# Version 11.0 Build 157 04/27/2011 SJ Web Edition
+#
+# -------------------------------------------------------------------------- #
+
+
+set_global_assignment -name FAMILY Cyclone
+set_global_assignment -name DEVICE EP1C12Q240C8
+set_global_assignment -name TOP_LEVEL_ENTITY audio
+set_global_assignment -name ORIGINAL_QUARTUS_VERSION 11.0
+set_global_assignment -name LAST_QUARTUS_VERSION 11.0
+set_global_assignment -name DEVICE_FILTER_PIN_COUNT 240
+set_global_assignment -name DEVICE_FILTER_SPEED_GRADE 8
+set_global_assignment -name ERROR_CHECK_FREQUENCY_DIVISOR 1
+set_global_assignment -name MIN_CORE_JUNCTION_TEMP 0
+set_global_assignment -name MAX_CORE_JUNCTION_TEMP 85
+set_global_assignment -name STRATIX_DEVICE_IO_STANDARD "3.3-V LVTTL"
+set_global_assignment -name USE_CONFIGURATION_DEVICE ON
+set_global_assignment -name CYCLONE_CONFIGURATION_DEVICE EPCS4
+set_global_assignment -name RESERVE_ALL_UNUSED_PINS "AS INPUT TRI-STATED"
+set_global_assignment -name RESERVE_ALL_UNUSED_PINS_NO_OUTPUT_GND "AS INPUT TRI-STATED"
+
+# Clock and reset
+set_location_assignment PIN_28 -to clk_21m
+set_location_assignment PIN_55 -to rst_n_in
+
+# DIP0 (physical SW1) — audio enable
+set_location_assignment PIN_53 -to dip0
+
+# Heartbeat LED (LED0)
+set_location_assignment PIN_43 -to led
+
+# Left DAC (SL0..SL3 = 105..108, SL4..SL5 = 113..114; pins 109-112 are NOT audio)
+set_location_assignment PIN_105 -to sl[0]
+set_location_assignment PIN_106 -to sl[1]
+set_location_assignment PIN_107 -to sl[2]
+set_location_assignment PIN_108 -to sl[3]
+set_location_assignment PIN_113 -to sl[4]
+set_location_assignment PIN_114 -to sl[5]
+
+# Right DAC (SR0..SR5 = 115..120)
+set_location_assignment PIN_115 -to sr[0]
+set_location_assignment PIN_116 -to sr[1]
+set_location_assignment PIN_117 -to sr[2]
+set_location_assignment PIN_118 -to sr[3]
+set_location_assignment PIN_119 -to sr[4]
+set_location_assignment PIN_120 -to sr[5]
+
+# Source files
+set_global_assignment -name VERILOG_FILE audio.v
+set_global_assignment -name VERILOG_FILE tone_gen.v
+set_global_assignment -name SDC_FILE audio.sdc
+
+set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
+set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
+set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
+
+set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
