@@ -1,0 +1,85 @@
+# -------------------------------------------------------------------------- #
+#
+# Quartus II
+# Version 11.0 Build 157 04/27/2011 SJ Web Edition
+#
+# -------------------------------------------------------------------------- #
+
+
+set_global_assignment -name FAMILY Cyclone
+set_global_assignment -name DEVICE EP1C12Q240C8
+set_global_assignment -name TOP_LEVEL_ENTITY sdcard
+set_global_assignment -name ORIGINAL_QUARTUS_VERSION 11.0
+set_global_assignment -name LAST_QUARTUS_VERSION 11.0
+set_global_assignment -name DEVICE_FILTER_PIN_COUNT 240
+set_global_assignment -name DEVICE_FILTER_SPEED_GRADE 8
+set_global_assignment -name ERROR_CHECK_FREQUENCY_DIVISOR 1
+set_global_assignment -name MIN_CORE_JUNCTION_TEMP 0
+set_global_assignment -name MAX_CORE_JUNCTION_TEMP 85
+set_global_assignment -name STRATIX_DEVICE_IO_STANDARD "3.3-V LVTTL"
+set_global_assignment -name USE_CONFIGURATION_DEVICE ON
+set_global_assignment -name CYCLONE_CONFIGURATION_DEVICE EPCS4
+set_global_assignment -name RESERVE_ALL_UNUSED_PINS "AS INPUT TRI-STATED"
+set_global_assignment -name RESERVE_ALL_UNUSED_PINS_NO_OUTPUT_GND "AS INPUT TRI-STATED"
+
+# Clock and reset
+set_location_assignment PIN_28 -to clk_21m
+set_location_assignment PIN_55 -to rst_n_in
+
+# Video out — VGA-style sync + 6-bit RGB to LCD scaler
+set_location_assignment PIN_75 -to hsync
+set_location_assignment PIN_74 -to vsync
+set_location_assignment PIN_95 -to r[0]
+set_location_assignment PIN_98 -to r[1]
+set_location_assignment PIN_99 -to r[2]
+set_location_assignment PIN_100 -to r[3]
+set_location_assignment PIN_101 -to r[4]
+set_location_assignment PIN_104 -to r[5]
+set_location_assignment PIN_85 -to g[0]
+set_location_assignment PIN_86 -to g[1]
+set_location_assignment PIN_87 -to g[2]
+set_location_assignment PIN_88 -to g[3]
+set_location_assignment PIN_93 -to g[4]
+set_location_assignment PIN_94 -to g[5]
+set_location_assignment PIN_77 -to b[0]
+set_location_assignment PIN_78 -to b[1]
+set_location_assignment PIN_79 -to b[2]
+set_location_assignment PIN_82 -to b[3]
+set_location_assignment PIN_83 -to b[4]
+set_location_assignment PIN_84 -to b[5]
+
+# 8 user LEDs (pins 43..50)
+set_location_assignment PIN_43 -to led[0]
+set_location_assignment PIN_44 -to led[1]
+set_location_assignment PIN_45 -to led[2]
+set_location_assignment PIN_46 -to led[3]
+set_location_assignment PIN_47 -to led[4]
+set_location_assignment PIN_48 -to led[5]
+set_location_assignment PIN_49 -to led[6]
+set_location_assignment PIN_50 -to led[7]
+
+# SD card SPI — confirmed from manual pin assignment table.
+# D1=61 D0=62 CK=63 CM=64 D3=65 D2=66
+# SPI mode uses only CK, CM, D0, D3; D1/D2 float (tri-stated by global setting).
+set_location_assignment PIN_63 -to sd_clk
+set_location_assignment PIN_64 -to sd_mosi
+set_location_assignment PIN_62 -to sd_miso
+set_location_assignment PIN_65 -to sd_cs_n
+
+# Source files
+set_global_assignment -name VERILOG_FILE sdcard.v
+set_global_assignment -name VERILOG_FILE spi_master.v
+set_global_assignment -name VERILOG_FILE sd_ctrl.v
+set_global_assignment -name VERILOG_FILE hex_dump.v
+set_global_assignment -name VERILOG_FILE vga65mhz_pll.v
+set_global_assignment -name VERILOG_FILE timing.v
+set_global_assignment -name VERILOG_FILE char_rom.v
+set_global_assignment -name MIF_FILE vga_8x16.mif
+set_global_assignment -name SDC_FILE sdcard.sdc
+
+set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
+set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
+set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
+
+
+set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
