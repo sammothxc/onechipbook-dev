@@ -1,0 +1,53 @@
+# -------------------------------------------------------------------------- #
+#
+# Quartus II
+# Version 11.0 Build 157 04/27/2011 SJ Web Edition
+#
+# -------------------------------------------------------------------------- #
+
+set_global_assignment -name FAMILY Cyclone
+set_global_assignment -name DEVICE EP1C12Q240C8
+set_global_assignment -name TOP_LEVEL_ENTITY uart
+set_global_assignment -name ORIGINAL_QUARTUS_VERSION 11.0
+set_global_assignment -name LAST_QUARTUS_VERSION 11.0
+set_global_assignment -name DEVICE_FILTER_PIN_COUNT 240
+set_global_assignment -name DEVICE_FILTER_SPEED_GRADE 8
+set_global_assignment -name ERROR_CHECK_FREQUENCY_DIVISOR 1
+set_global_assignment -name MIN_CORE_JUNCTION_TEMP 0
+set_global_assignment -name MAX_CORE_JUNCTION_TEMP 85
+set_global_assignment -name STRATIX_DEVICE_IO_STANDARD "3.3-V LVTTL"
+set_global_assignment -name USE_CONFIGURATION_DEVICE ON
+set_global_assignment -name CYCLONE_CONFIGURATION_DEVICE EPCS4
+set_global_assignment -name RESERVE_ALL_UNUSED_PINS "AS INPUT TRI-STATED"
+set_global_assignment -name RESERVE_ALL_UNUSED_PINS_NO_OUTPUT_GND "AS INPUT TRI-STATED"
+
+# Clock and reset
+set_location_assignment PIN_28 -to clk_21m
+set_location_assignment PIN_55 -to rst_n_in
+
+# UART (confirm with manual before programming)
+set_location_assignment PIN_239 -to uart_txd
+set_location_assignment PIN_238 -to uart_rxd
+
+# 8 user LEDs
+set_location_assignment PIN_43 -to led[0]
+set_location_assignment PIN_44 -to led[1]
+set_location_assignment PIN_45 -to led[2]
+set_location_assignment PIN_46 -to led[3]
+set_location_assignment PIN_47 -to led[4]
+set_location_assignment PIN_48 -to led[5]
+set_location_assignment PIN_49 -to led[6]
+set_location_assignment PIN_50 -to led[7]
+
+# Source files
+set_global_assignment -name VERILOG_FILE uart.v
+set_global_assignment -name VERILOG_FILE uart_tx.v
+set_global_assignment -name VERILOG_FILE uart_rx.v
+set_global_assignment -name SDC_FILE uart.sdc
+
+set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
+set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
+set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
+
+
+set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
