@@ -23,8 +23,12 @@ module hex_dump (
     input  wire        visible,
 
     // Block-buffer read port (1-cycle latency)
-    output wire  [8:0] rd_addr,
+    // rd_addr = {page_sel[4:0], text_row[3:0], byte_col[4:0]} = 14 bits
+    output wire [13:0] rd_addr,
     input  wire  [7:0] rd_data,
+
+    // Which 512-byte page (sector) to display — driven by DIP switches.
+    input  wire  [4:0] page_sel,
 
     output reg   [5:0] r,
     output reg   [5:0] g,
@@ -55,7 +59,7 @@ module hex_dump (
     wire [4:0]  byte_col    = hex_idx[5:1];      // 0..31 byte index in row
     wire        is_high_nib = ~hex_idx[0];       // even hex slot = high nibble
 
-    assign rd_addr = {text_row, byte_col};       // 9 bits → 0..511
+    assign rd_addr = {page_sel, text_row, byte_col};  // 14 bits → 0..16383
 
     // Row-offset prefix is 3 hex digits + ':'. Row addresses run 0x000, 0x020,
     // 0x040, … 0x1E0 — so digit0 is always '0', digit2 ∈ {'0','1'}, and digit1

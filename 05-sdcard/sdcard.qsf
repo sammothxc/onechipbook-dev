@@ -58,6 +58,14 @@ set_location_assignment PIN_48 -to led[5]
 set_location_assignment PIN_49 -to led[6]
 set_location_assignment PIN_50 -to led[7]
 
+# Page select — DIP3..DIP7 (pins 56..60). DIP2=PIN_55=rst_n_in, so skip it.
+# Physical: flip these 5 switches to binary-encode which sector (0–31) to view.
+set_location_assignment PIN_56 -to page_sel_in[0]
+set_location_assignment PIN_57 -to page_sel_in[1]
+set_location_assignment PIN_58 -to page_sel_in[2]
+set_location_assignment PIN_59 -to page_sel_in[3]
+set_location_assignment PIN_60 -to page_sel_in[4]
+
 # SD card SPI — confirmed from manual pin assignment table.
 # D1=61 D0=62 CK=63 CM=64 D3=65 D2=66
 # SPI mode uses only CK, CM, D0, D3; D1/D2 float (tri-stated by global setting).

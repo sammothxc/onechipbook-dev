@@ -11,5 +11,6 @@ set_false_path -from * -to [get_ports {sd_clk sd_cs_n sd_mosi}]
 
 # Block buffer crosses from SD-controller domain (clk_21m) to pixel domain.
 # Writes happen once during init; once sd_ready is high the buffer is stable.
-# Clock name comes from the map/sta report: derive_pll_clocks creates this path.
-set_false_path -from [get_clocks clk_21m] -to [get_clocks {vga65mhz_pll:pll_inst|altpll:altpll_component|_clk0}]
+# Clock name confirmed from sdcard.sta.rpt — derive_pll_clocks creates this name
+# (no module-type prefixes, clk[0] not c0 or _clk0).
+set_false_path -from [get_clocks clk_21m] -to [get_clocks {pll_inst|altpll_component|pll|clk[0]}]

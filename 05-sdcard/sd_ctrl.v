@@ -37,7 +37,7 @@ module sd_ctrl (
     input  wire        sd_miso,
 
     // Block-buffer write port (1 byte/word, 512 entries)
-    output reg   [8:0] buf_addr,
+    output reg  [13:0] buf_addr,
     output reg   [7:0] buf_data,
     output reg         buf_we,
 
@@ -118,11 +118,15 @@ module sd_ctrl (
     reg        v2_card;
     reg        sdhc;            // CCS=1 → SDHC/SDXC (latched from CMD58 OCR bit 30)
 
-    // Sector to read in Stage B. Stage D will make this a port input.
-    localparam [31:0] READ_SECTOR = 32'd0;
+    reg  [4:0] sector_idx;     // which sector we are currently reading (0..31)
+    // Unsized integer — 32 doesn't fit in 5 bits so never give this a [4:0] width.
+    localparam BOOT_SECTORS  = 32;
+    localparam [4:0] LAST_SECTOR = 5'd31;  // BOOT_SECTORS - 1, pre-computed
 
-    // CMD17 argument: SDSC uses byte addressing (sector × 512), SDHC uses block.
-    wire [31:0] rd_arg = sdhc ? READ_SECTOR : (READ_SECTOR << 9);
+    // CMD17 argument for the current sector.
+    // SDSC: byte address = sector × 512. SDHC/SDXC: block address = sector.
+    wire [31:0] rd_arg = sdhc ? {27'b0, sector_idx}
+                               : {18'b0, sector_idx, 9'b0};
 
     // ---- Command-byte ROM (combinational, depends on state + flags) ----
     // SPI-mode CRC is checked only on CMD0 and CMD8; other commands use a stub.
@@ -199,7 +203,8 @@ module sd_ctrl (
             spi_start   <= 1'b0;
             spi_tx_data <= 8'hFF;
             spi_div     <= DIV_INIT;
-            buf_addr    <= 9'd0;
+            sector_idx  <= 5'd0;
+            buf_addr    <= 14'd0;
             buf_data    <= 8'd0;
             buf_we      <= 1'b0;
             ready       <= 1'b0;
@@ -354,7 +359,7 @@ module sd_ctrl (
                     P_DATA_READ: begin
                         if (spi_done) begin
                             // Capture this byte into the buffer.
-                            buf_addr <= data_idx[8:0];
+                            buf_addr <= {sector_idx, data_idx[8:0]};
                             buf_data <= spi_rx_data;
                             buf_we   <= 1'b1;
                             if (data_idx == 10'd511) begin
@@ -476,7 +481,14 @@ module sd_ctrl (
                                 end
 
                                 S_CMD17: begin
-                                    state <= S_DONE;
+                                    // All BOOT_SECTORS read → done.
+                                    // Otherwise increment and re-issue CMD17.
+                                    if (sector_idx == LAST_SECTOR) begin
+                                        state <= S_DONE;
+                                    end else begin
+                                        sector_idx <= sector_idx + 5'd1;
+                                        phase      <= P_PREP;
+                                    end
                                     phase <= P_PREP;
                                 end
 
