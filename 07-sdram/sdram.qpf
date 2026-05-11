@@ -1,0 +1,6 @@
+QUARTUS_VERSION = "11.0"
+DATE = "00:00:00  January 01, 2026"
+
+# Revisions
+
+PROJECT_REVISION = "sdram"

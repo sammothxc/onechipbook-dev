@@ -1,0 +1,202 @@
+# -------------------------------------------------------------------------- #
+#
+# Quartus II
+# Version 11.0 Build 157 04/27/2011 SJ Web Edition
+#
+# -------------------------------------------------------------------------- #
+
+set_global_assignment -name FAMILY Cyclone
+set_global_assignment -name DEVICE EP1C12Q240C8
+set_global_assignment -name TOP_LEVEL_ENTITY sdram
+set_global_assignment -name ORIGINAL_QUARTUS_VERSION 11.0
+set_global_assignment -name LAST_QUARTUS_VERSION 11.0
+set_global_assignment -name DEVICE_FILTER_PIN_COUNT 240
+set_global_assignment -name DEVICE_FILTER_SPEED_GRADE 8
+set_global_assignment -name ERROR_CHECK_FREQUENCY_DIVISOR 1
+set_global_assignment -name MIN_CORE_JUNCTION_TEMP 0
+set_global_assignment -name MAX_CORE_JUNCTION_TEMP 85
+set_global_assignment -name STRATIX_DEVICE_IO_STANDARD "3.3-V LVTTL"
+set_global_assignment -name USE_CONFIGURATION_DEVICE ON
+set_global_assignment -name CYCLONE_CONFIGURATION_DEVICE EPCS4
+set_global_assignment -name RESERVE_ALL_UNUSED_PINS "AS INPUT TRI-STATED"
+set_global_assignment -name RESERVE_ALL_UNUSED_PINS_NO_OUTPUT_GND "AS INPUT TRI-STATED"
+
+# Clock and reset
+set_location_assignment PIN_28 -to clk_21m
+set_location_assignment PIN_60 -to rst_n_in
+
+# 8 user LEDs (1-indexed to match physical labels LED1..LED8; LED9 is the extra)
+set_location_assignment PIN_43  -to led[1]
+set_location_assignment PIN_44  -to led[2]
+set_location_assignment PIN_45  -to led[3]
+set_location_assignment PIN_46  -to led[4]
+set_location_assignment PIN_47  -to led[5]
+set_location_assignment PIN_48  -to led[6]
+set_location_assignment PIN_49  -to led[7]
+set_location_assignment PIN_50  -to led[8]
+set_location_assignment PIN_240 -to led[9]
+
+# 8 user DIP switches (1-indexed to match physical labels SW1..SW8)
+set_location_assignment PIN_53 -to sw[1]
+set_location_assignment PIN_54 -to sw[2]
+set_location_assignment PIN_55 -to sw[3]
+set_location_assignment PIN_56 -to sw[4]
+set_location_assignment PIN_57 -to sw[5]
+set_location_assignment PIN_58 -to sw[6]
+set_location_assignment PIN_59 -to sw[7]
+set_location_assignment PIN_60 -to sw[8]
+
+# PS2
+set_location_assignment PIN_68 -to ps2_clk
+set_location_assignment PIN_67 -to ps2_dat
+
+# Video
+set_location_assignment PIN_84 -to vga_b[5]
+set_location_assignment PIN_83 -to vga_b[4]
+set_location_assignment PIN_82 -to vga_b[3]
+set_location_assignment PIN_79 -to vga_b[2]
+set_location_assignment PIN_78 -to vga_b[1]
+set_location_assignment PIN_77 -to vga_b[0]
+set_location_assignment PIN_94 -to vga_g[5]
+set_location_assignment PIN_93 -to vga_g[4]
+set_location_assignment PIN_88 -to vga_g[3]
+set_location_assignment PIN_87 -to vga_g[2]
+set_location_assignment PIN_86 -to vga_g[1]
+set_location_assignment PIN_85 -to vga_g[0]
+set_location_assignment PIN_104 -to vga_r[5]
+set_location_assignment PIN_101 -to vga_r[4]
+set_location_assignment PIN_100 -to vga_r[3]
+set_location_assignment PIN_99 -to vga_r[2]
+set_location_assignment PIN_98 -to vga_r[1]
+set_location_assignment PIN_95 -to vga_r[0]
+set_location_assignment PIN_74 -to vga_vsync
+set_location_assignment PIN_75 -to vga_hsync
+
+# Audio
+set_location_assignment PIN_105 -to s_l[0]
+set_location_assignment PIN_106 -to s_l[1]
+set_location_assignment PIN_107 -to s_l[2]
+set_location_assignment PIN_108 -to s_l[3]
+set_location_assignment PIN_113 -to s_l[4]
+set_location_assignment PIN_114 -to s_l[5]
+set_location_assignment PIN_115 -to s_r[0]
+set_location_assignment PIN_116 -to s_r[1]
+set_location_assignment PIN_117 -to s_r[2]
+set_location_assignment PIN_118 -to s_r[3]
+set_location_assignment PIN_119 -to s_r[4]
+set_location_assignment PIN_120 -to s_r[5]
+
+# SD card
+set_location_assignment PIN_53 -to sd_dat[0]
+set_location_assignment PIN_54 -to sd_dat[1]
+set_location_assignment PIN_55 -to sd_dat[2]
+set_location_assignment PIN_56 -to sd_dat[3]
+set_location_assignment PIN_57 -to sd_clk
+set_location_assignment PIN_58 -to sd_cmd
+
+# esp01s UART
+set_location_assignment PIN_236 -to wifi_tx
+set_location_assignment PIN_237 -to wifi_rx
+
+# USB
+set_location_assignment PIN_238 -to usb_dp
+set_location_assignment PIN_239 -to usb_dn
+
+# SDRAM
+set_location_assignment PIN_38 -to sdram_clk
+set_location_assignment PIN_39 -to sdram_cke
+set_location_assignment PIN_197 -to sdram_cs_n
+set_location_assignment PIN_196 -to sdram_ras_n
+set_location_assignment PIN_195 -to sdram_cas_n
+set_location_assignment PIN_194 -to sdram_we_n
+set_location_assignment PIN_200 -to sdram_ba[0]
+set_location_assignment PIN_201 -to sdram_ba[1]
+set_location_assignment PIN_203 -to sdram_a[0]
+set_location_assignment PIN_206 -to sdram_a[1]
+set_location_assignment PIN_207 -to sdram_a[2]
+set_location_assignment PIN_208 -to sdram_a[3]
+set_location_assignment PIN_235 -to sdram_a[4]
+set_location_assignment PIN_234 -to sdram_a[5]
+set_location_assignment PIN_233 -to sdram_a[6]
+set_location_assignment PIN_228 -to sdram_a[7]
+set_location_assignment PIN_227 -to sdram_a[8]
+set_location_assignment PIN_226 -to sdram_a[9]
+set_location_assignment PIN_202 -to sdram_a[10]
+set_location_assignment PIN_225 -to sdram_a[11]
+set_location_assignment PIN_224 -to sdram_a[12]
+set_location_assignment PIN_193 -to sdram_dqm[0]
+set_location_assignment PIN_223 -to sdram_dqm[1]
+set_location_assignment PIN_181 -to sdram_dq[0]
+set_location_assignment PIN_182 -to sdram_dq[1]
+set_location_assignment PIN_183 -to sdram_dq[2]
+set_location_assignment PIN_184 -to sdram_dq[3]
+set_location_assignment PIN_185 -to sdram_dq[4]
+set_location_assignment PIN_186 -to sdram_dq[5]
+set_location_assignment PIN_187 -to sdram_dq[6]
+set_location_assignment PIN_188 -to sdram_dq[7]
+set_location_assignment PIN_222 -to sdram_dq[8]
+set_location_assignment PIN_219 -to sdram_dq[9]
+set_location_assignment PIN_218 -to sdram_dq[10]
+set_location_assignment PIN_217 -to sdram_dq[11]
+set_location_assignment PIN_216 -to sdram_dq[12]
+set_location_assignment PIN_215 -to sdram_dq[13]
+set_location_assignment PIN_214 -to sdram_dq[14]
+set_location_assignment PIN_213 -to sdram_dq[15]
+
+# IO card side A
+set_location_assignment PIN_122 -to io[0]
+set_location_assignment PIN_124 -to io[1]
+set_location_assignment PIN_126 -to io[2]
+set_location_assignment PIN_128 -to io[3]
+set_location_assignment PIN_132 -to io[4]
+set_location_assignment PIN_134 -to io[5]
+set_location_assignment PIN_136 -to io[6]
+set_location_assignment PIN_139 -to io[7]
+set_location_assignment PIN_141 -to io[8]
+set_location_assignment PIN_156 -to io[9]
+set_location_assignment PIN_159 -to io[10]
+set_location_assignment PIN_161 -to io[11]
+set_location_assignment PIN_163 -to io[12]
+set_location_assignment PIN_165 -to io[13]
+set_location_assignment PIN_167 -to io[14]
+set_location_assignment PIN_169 -to io[15]
+set_location_assignment PIN_173 -to io[16]
+set_location_assignment PIN_175 -to io[17]
+set_location_assignment PIN_177 -to io[18]
+
+# IO card side B
+set_location_assignment PIN_123 -to io[19]
+set_location_assignment PIN_121 -to io[20]
+set_location_assignment PIN_127 -to io[21]
+set_location_assignment PIN_131 -to io[22]
+set_location_assignment PIN_133 -to io[23]
+set_location_assignment PIN_135 -to io[24]
+set_location_assignment PIN_137 -to io[25]
+set_location_assignment PIN_138 -to io[26]
+set_location_assignment PIN_140 -to io[27]
+set_location_assignment PIN_143 -to io[28]
+set_location_assignment PIN_158 -to io[29]
+set_location_assignment PIN_160 -to io[30]
+set_location_assignment PIN_162 -to io[31]
+set_location_assignment PIN_164 -to io[32]
+set_location_assignment PIN_166 -to io[33]
+set_location_assignment PIN_168 -to io[34]
+set_location_assignment PIN_170 -to io[35]
+set_location_assignment PIN_174 -to io[36]
+set_location_assignment PIN_176 -to io[37]
+set_location_assignment PIN_178 -to io[38]
+set_location_assignment PIN_144 -to io[39]
+set_location_assignment PIN_179 -to io[40]
+set_location_assignment PIN_180 -to io[41]
+
+# Source files
+set_global_assignment -name VERILOG_FILE sdram.v
+set_global_assignment -name VERILOG_FILE sdram_ctrl.v
+set_global_assignment -name SDC_FILE sdram.sdc
+
+set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
+set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
+set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
+
+
+set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
