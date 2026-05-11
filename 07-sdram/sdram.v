@@ -1,12 +1,11 @@
-// 07-sdram Stage A diagnostic mode: write/read a single word at the address
-// that was failing (bank 3, row 0x1000) and display the low byte of the
-// read result on the LEDs.
+// 07-sdram Stage A: SDRAM init + 8-vector read/write self-test.
 //
-// Expected result: 8'hBE (low byte of 0xBABE).
-// If we see something else, the actual bits returned tell us what's broken:
-//   8'h00  -> read returned zero; A12 likely stuck low during ACTIVE
-//   8'hFF  -> read returned all-ones; DQ floating or tri-state stuck
-//   other  -> partial bit failure; compare to 0xBE to identify failing DQ pins
+// After reset the FSM writes 8 known 16-bit words to addresses spanning
+// all 4 banks and all 13 row-address bits, then reads them back and
+// compares.  Results shown on LEDs (1-indexed, LED1=LSB ... LED8=MSB):
+//   8'hAA — all 8 words matched (pass)
+//   8'h5N — mismatch at test index N (bits 2:0 = failing index)
+//   8'hFF — still initializing / running test
 module sdram (
     input  wire       clk_21m,
     input  wire       rst_n_in,
@@ -69,15 +68,41 @@ module sdram (
     );
 
     // ----------------------------------------------------------------
-    //  Diagnostic FSM — single write+read to the failing address.
-    //
-    //  Write 0xBABE to bank 3, row 0x1000, col 0.
-    //  Read it back. Display low byte of result on LEDs.
-    //  Expected: 8'hBE.
+    //  Test vectors: 8 write addresses + expected data
     // ----------------------------------------------------------------
-    localparam DIAG_ADDR = 25'h1C00000;   // bank3, row=0x1000, col=0x000
-    localparam DIAG_DATA = 16'hBABE;
+    function [15:0] test_data;
+        input [2:0] idx;
+        case (idx)
+            3'd0: test_data = 16'hDEAD;
+            3'd1: test_data = 16'hBEEF;
+            3'd2: test_data = 16'hCAFE;
+            3'd3: test_data = 16'hBABE;
+            3'd4: test_data = 16'h1234;
+            3'd5: test_data = 16'h5678;
+            3'd6: test_data = 16'h9ABC;
+            3'd7: test_data = 16'hDEF0;
+        endcase
+    endfunction
 
+    function [24:0] test_addr;
+        input [2:0] idx;
+        // Spread across all 4 banks; row values exercise all 13 row bits.
+        // addr[24:23]=bank, addr[22:10]=row, addr[9:1]=col, addr[0]=ignored.
+        case (idx)
+            3'd0: test_addr = 25'h02AA800;  // bank0, row=0x0AAA, col=0x000
+            3'd1: test_addr = 25'h0D55400;  // bank1, row=0x1555, col=0x000
+            3'd2: test_addr = 25'h13FFC00;  // bank2, row=0x0FFF, col=0x000
+            3'd3: test_addr = 25'h1C00000;  // bank3, row=0x1000, col=0x000
+            3'd4: test_addr = 25'h02AABFE;  // bank0, row=0x0AAA, col=0x1FF
+            3'd5: test_addr = 25'h0D557FE;  // bank1, row=0x1555, col=0x1FF
+            3'd6: test_addr = 25'h1000402;  // bank2, row=0x0001, col=0x001
+            3'd7: test_addr = 25'h1FFF800;  // bank3, row=0x1FFE, col=0x000
+        endcase
+    endfunction
+
+    // ----------------------------------------------------------------
+    //  Test FSM: write all 8, then read all 8 and compare.
+    // ----------------------------------------------------------------
     localparam T_WRITE   = 3'd0;
     localparam T_WRITE_W = 3'd1;
     localparam T_READ    = 3'd2;
@@ -85,10 +110,12 @@ module sdram (
     localparam T_DONE    = 3'd4;
 
     reg [2:0] tstate;
+    reg [2:0] tidx;
 
     always @(posedge clk_21m or negedge rst_n_in) begin
         if (!rst_n_in) begin
             tstate   <= T_WRITE;
+            tidx     <= 3'd0;
             req      <= 1'b0;
             we       <= 1'b0;
             addr     <= 25'd0;
@@ -104,8 +131,8 @@ module sdram (
                     if (!busy) begin
                         req     <= 1'b1;
                         we      <= 1'b1;
-                        addr    <= DIAG_ADDR;
-                        wr_data <= DIAG_DATA;
+                        addr    <= test_addr(tidx);
+                        wr_data <= test_data(tidx);
                         wr_mask <= 2'b11;
                         tstate  <= T_WRITE_W;
                     end
@@ -113,7 +140,13 @@ module sdram (
 
                 T_WRITE_W: begin
                     if (!busy) begin
-                        tstate <= T_READ;
+                        if (tidx == 3'd7) begin
+                            tidx   <= 3'd0;
+                            tstate <= T_READ;
+                        end else begin
+                            tidx   <= tidx + 1'b1;
+                            tstate <= T_WRITE;
+                        end
                     end
                 end
 
@@ -121,21 +154,27 @@ module sdram (
                     if (!busy) begin
                         req    <= 1'b1;
                         we     <= 1'b0;
-                        addr   <= DIAG_ADDR;
+                        addr   <= test_addr(tidx);
                         tstate <= T_READ_W;
                     end
                 end
 
                 T_READ_W: begin
                     if (rd_valid) begin
-                        led    <= rd_data[7:0];   // show low byte
-                        tstate <= T_DONE;
+                        if (rd_data != test_data(tidx)) begin
+                            led    <= {4'h5, 1'b0, tidx};
+                            tstate <= T_DONE;
+                        end else if (tidx == 3'd7) begin
+                            led    <= 8'hAA;
+                            tstate <= T_DONE;
+                        end else begin
+                            tidx   <= tidx + 1'b1;
+                            tstate <= T_READ;
+                        end
                     end
                 end
 
-                T_DONE: begin
-                    // Hold result forever
-                end
+                T_DONE: ;
 
             endcase
         end

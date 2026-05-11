@@ -223,7 +223,7 @@ module sdram_ctrl (
                     // PRECHARGE: cs=0 ras=0 cas=1 we=0, A10=1 (all banks)
                     sdram_ras_n <= 1'b0;
                     sdram_we_n  <= 1'b0;
-                    sdram_a     <= 13'b0_0100_0000_0000;  // A10=1
+                    sdram_a     <= 13'b0_0100_0000_0000;  // A10=1 (all banks)
                     wait_cnt    <= tRP_WAIT;
                     state       <= S_INIT_PRE_W;
                 end
@@ -335,7 +335,7 @@ module sdram_ctrl (
                     // READ: cs=0 ras=1 cas=0 we=1, A10=1 (auto-precharge)
                     sdram_cas_n <= 1'b0;
                     sdram_ba    <= latch_bank;
-                    sdram_a     <= {4'b0100, latch_col};  // A10=1, A[8:0]=col
+                    sdram_a     <= {2'b00, 1'b1, 1'b0, latch_col};  // A10=1, A[8:0]=col
                     sdram_dqm   <= 2'b00;  // enable both bytes
                     // CL=2: data arrives 2 cycles after READ command.
                     // Cycle 0: READ issued (this cycle)
@@ -364,7 +364,7 @@ module sdram_ctrl (
                     sdram_cas_n <= 1'b0;
                     sdram_we_n  <= 1'b0;
                     sdram_ba    <= latch_bank;
-                    sdram_a     <= {4'b0100, latch_col};  // A10=1
+                    sdram_a     <= {2'b00, 1'b1, 1'b0, latch_col};  // A10=1
                     sdram_dqm   <= ~latch_wmask;  // DQM active-LOW masks; wmask active-HIGH enables
                     dq_oe       <= 1'b1;
                     dq_out      <= latch_wdata;

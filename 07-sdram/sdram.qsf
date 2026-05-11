@@ -26,14 +26,14 @@ set_location_assignment PIN_28 -to clk_21m
 set_location_assignment PIN_60 -to rst_n_in
 
 # 8 user LEDs (1-indexed to match physical labels LED1..LED8; LED9 is the extra)
-set_location_assignment PIN_43  -to led[1]
-set_location_assignment PIN_44  -to led[2]
-set_location_assignment PIN_45  -to led[3]
-set_location_assignment PIN_46  -to led[4]
-set_location_assignment PIN_47  -to led[5]
-set_location_assignment PIN_48  -to led[6]
-set_location_assignment PIN_49  -to led[7]
-set_location_assignment PIN_50  -to led[8]
+set_location_assignment PIN_43 -to led[1]
+set_location_assignment PIN_44 -to led[2]
+set_location_assignment PIN_45 -to led[3]
+set_location_assignment PIN_46 -to led[4]
+set_location_assignment PIN_47 -to led[5]
+set_location_assignment PIN_48 -to led[6]
+set_location_assignment PIN_49 -to led[7]
+set_location_assignment PIN_50 -to led[8]
 set_location_assignment PIN_240 -to led[9]
 
 # 8 user DIP switches (1-indexed to match physical labels SW1..SW8)
